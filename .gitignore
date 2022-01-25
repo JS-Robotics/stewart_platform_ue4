@@ -51,8 +51,9 @@ SourceArt/**/*.tga
 Binaries/*
 Plugins/*/Binaries/*
 
-# For rider
-Plugins/*/*/Binaries/* 
+# For Rider's RiderLink
+Plugins/Developer/RiderLink/Binaries/* 
+Plugins/Developer/RiderLink/Intermediate/*
 
 # Builds
 Build/*
@@ -73,7 +74,6 @@ Saved/*
 
 # Compiled source files for the engine to use
 Intermediate/*
-Plugins/*/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
