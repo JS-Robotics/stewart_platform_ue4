@@ -8,3 +8,5 @@ You've got number of options:
 
       Plugins/Developer/RiderLink/Binaries
       Plugins/Developer/RiderLink/Intermediate
+
+Collision filtering: https://www.unrealengine.com/en-US/blog/collision-filtering?sessionInvalidated=true

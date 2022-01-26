@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "StewartPlatform.generated.h"
 
 UCLASS()
@@ -14,6 +15,16 @@ class STEWART_PLATFORM_API AStewartPlatform : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AStewartPlatform();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UStaticMeshComponent* lower_yoke_driven;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UStaticMeshComponent* lower_spider;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UStaticMeshComponent* lower_yoke_driver;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UPhysicsConstraintComponent* lower_revolute_1_joint;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UPhysicsConstraintComponent* lower_revolute_2_joint;
+
+	
+	
 
 protected:
 	// Called when the game starts or when spawned
