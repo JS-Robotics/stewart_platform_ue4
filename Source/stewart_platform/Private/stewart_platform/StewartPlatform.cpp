@@ -3,6 +3,7 @@
 
 #include "stewart_platform/StewartPlatform.h"
 
+#include "NavigationSystemTypes.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 
 // Sets default values
@@ -13,10 +14,11 @@ AStewartPlatform::AStewartPlatform()
 
 	//Get Meshes
 	// UString lower_yoke_driven_path = "Meshes/LinearActuator/yoke_lower_driven.yoke_lower_cylinder";
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driven_asset(TEXT("/Game/Meshes/LinearActuator/yoke_lower_driven.yoke_lower_driven"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_spider_asset(TEXT("/Game/Meshes/LinearActuator/spider_lower.spider_lower"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driver_asset(TEXT("/Game/Meshes/LinearActuator/yoke_lower_driver.yoke_lower_driver"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driven_asset(TEXT("/Game/Meshes/LinearActuator/lower_yoke_driven.lower_yoke_driven"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_spider_asset(TEXT("/Game/Meshes/LinearActuator/lower_spider.lower_spider"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driver_asset(TEXT("/Game/Meshes/LinearActuator/lower_yoke_driver.lower_yoke_driver"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> cylinder_asset(TEXT("/Game/Meshes/LinearActuator/cylinder.cylinder"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> piston_asset(TEXT("/Game/Meshes/LinearActuator/piston.piston"));
 
 	// Create a dummy for the root component
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene component"));
@@ -64,7 +66,7 @@ AStewartPlatform::AStewartPlatform()
 	// cylinder->SetupAttachment(lower_yoke_driven);
 	cylinder->SetSimulatePhysics(true);
 	cylinder->SetMobility(EComponentMobility::Movable);
-	cylinder->SetRelativeLocation({0,0,400});
+	cylinder->SetRelativeLocation({0,0,40});
 		
 	yoke_driven_fixed_cylinder = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixedJointYokeCylinder"));
 	yoke_driven_fixed_cylinder->SetupAttachment(RootComponent);
@@ -75,6 +77,26 @@ AStewartPlatform::AStewartPlatform()
 	yoke_driven_fixed_cylinder->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	yoke_driven_fixed_cylinder->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	yoke_driven_fixed_cylinder->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+
+	piston = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Piston"));
+	piston->SetStaticMesh(piston_asset.Object);
+	piston->SetupAttachment(RootComponent);
+	piston->SetSimulatePhysics(true);
+	piston->SetMobility(EComponentMobility::Movable);
+	piston->SetRelativeLocation({0,0,2*40.0f});
+
+	cylinder_prismatic_piston = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("PrismaticCylinderPiston"));
+	cylinder_prismatic_piston->SetupAttachment(RootComponent);
+	cylinder_prismatic_piston->ComponentName1.ComponentName = "Cylinder";
+	cylinder_prismatic_piston->ComponentName2.ComponentName = "Piston";
+	cylinder_prismatic_piston->SetDisableCollision(true);
+	cylinder_prismatic_piston->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	cylinder_prismatic_piston->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	cylinder_prismatic_piston->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+	cylinder_prismatic_piston->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, 40.0f);
+	// cylinder_prismatic_piston->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 0.0f);
+	// piston->SetRelativeLocation({0,0,40.0f});
+	
 	
 }
 
