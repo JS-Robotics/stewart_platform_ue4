@@ -39,7 +39,7 @@ AStewartPlatform::AStewartPlatform()
 	dynamic_frame->SetStaticMesh(dynamic_frame_asset.Object);
 	dynamic_frame->SetupAttachment(RootComponent);
 	dynamic_frame->SetSimulatePhysics(false);
-	dynamic_frame->SetRelativeLocation({0, 0, 130.0f});
+	dynamic_frame->SetRelativeLocation({0, 0, 92.0f});
 	dynamic_frame->SetRelativeRotation({0,60.0f,0});
 
 	// // // Leg 1 start // // //
@@ -48,7 +48,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_yoke_driven_1->SetupAttachment(fixed_frame);
 	lower_yoke_driven_1->SetSimulatePhysics(false);
 	lower_yoke_driven_1->SetRelativeLocation({18.556623f,-55.235027f,2.5f});
-	lower_yoke_driven_1->SetRelativeRotation({0.0f,30.0f,0});
+	lower_yoke_driven_1->SetRelativeRotation({0.0f,250.0f,0});
 
 	lower_spider_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerSpider"));
 	lower_spider_1->SetStaticMesh(lower_spider_asset.Object);
@@ -62,9 +62,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_yoke_driver_1->SetupAttachment(lower_yoke_driven_1);
 	lower_yoke_driver_1->SetSimulatePhysics(true);
 	lower_yoke_driver_1->SetMobility(EComponentMobility::Movable);
-	// lower_yoke_driver_1->SetRelativeLocation({0, 0, 200});
-	// lower_yoke_driver_1->SetRelativeRotation({16.55538f,120.0f, -178.115524f});
-	lower_yoke_driver_1->SetRelativeRotation({0,-16.55538f, 0});
+	lower_yoke_driver_1->SetRelativeRotation({16.55538f,-16.55538f, 0});
 
 	// Constraint settings
 	constexpr   EAngularConstraintMotion _rotation_locked = ACM_Locked;
@@ -103,7 +101,8 @@ AStewartPlatform::AStewartPlatform()
 	piston_1->SetupAttachment(cylinder_1);
 	piston_1->SetSimulatePhysics(true);
 	piston_1->SetMobility(EComponentMobility::Movable);
-	piston_1->SetRelativeLocation({0,0,40.0f});
+	float piston_start = 6.0;
+	piston_1->SetRelativeLocation({0,0,piston_start});  // {0, 0, 40.0f}
 
 	cylinder_prismatic_piston_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("PrismaticCylinderPiston"));
 	cylinder_prismatic_piston_1->SetupAttachment(cylinder_1);
@@ -213,7 +212,11 @@ void AStewartPlatform::Tick(float DeltaTime)
 	
 	float realtimeSeconds = GetWorld()->GetRealTimeSeconds(); // https://answers.unrealengine.com/questions/167413/elapsed-milliseconds-since-start-of-level.html
 	float movement = 15.0f*sin(realtimeSeconds);
-	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 130.0f});
+	if (movement <= -4.0f)
+	{
+		movement = -4.0f;
+	}
+	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 92.0f + 6.0f});
 
 }
 
