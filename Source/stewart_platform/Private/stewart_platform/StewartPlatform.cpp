@@ -2,6 +2,8 @@
 
 
 #include "stewart_platform/StewartPlatform.h"
+
+#include "FindInBlueprintManager.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 
 // Sets default values
@@ -39,23 +41,29 @@ AStewartPlatform::AStewartPlatform()
 	dynamic_frame->SetStaticMesh(dynamic_frame_asset.Object);
 	dynamic_frame->SetupAttachment(RootComponent);
 	dynamic_frame->SetSimulatePhysics(false);
-	dynamic_frame->SetRelativeLocation({0, 0, 92.0f});
+	dynamic_frame->SetRelativeLocation({0, 0, 92.5f});
 	dynamic_frame->SetRelativeRotation({0,60.0f,0});
 
 	// // // Leg 1 start // // //
 	lower_yoke_driven_1 = CreateDefaultSubobject<UStaticMeshComponent>("LowerYokeDriven");
 	lower_yoke_driven_1->SetStaticMesh(lower_yoke_driven_asset.Object);
 	lower_yoke_driven_1->SetupAttachment(fixed_frame);
-	lower_yoke_driven_1->SetSimulatePhysics(false);
+	lower_yoke_driven_1->SetSimulatePhysics(true);
 	lower_yoke_driven_1->SetRelativeLocation({18.556623f,-55.235027f,2.5f});
 	lower_yoke_driven_1->SetRelativeRotation({0.0f,250.0f,0});
+	// FBodyInstance* BodyInst = lower_yoke_driven_1->GetBodyInstance();
+	// BodyInst->SetMassScale(1222.0f);
+	// BodyInst->UpdateMassProperties();
+	// lower_yoke_driven_1->SetMassOverrideInKg("LowerYokeDriven", 1.0f);
+	lower_yoke_driven_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	lower_spider_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerSpider"));
 	lower_spider_1->SetStaticMesh(lower_spider_asset.Object);
 	lower_spider_1->SetupAttachment(lower_yoke_driven_1);
 	lower_spider_1->SetSimulatePhysics(false);
 	lower_spider_1->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	lower_spider_1->SetMobility(EComponentMobility::Movable);
+	
+	
 
 	lower_yoke_driver_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerYokeDriver"));
 	lower_yoke_driver_1->SetStaticMesh(lower_yoke_driver_asset.Object);
@@ -63,6 +71,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_yoke_driver_1->SetSimulatePhysics(true);
 	lower_yoke_driver_1->SetMobility(EComponentMobility::Movable);
 	lower_yoke_driver_1->SetRelativeRotation({16.55538f,-16.55538f, 0});
+	lower_yoke_driver_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	// Constraint settings
 	constexpr   EAngularConstraintMotion _rotation_locked = ACM_Locked;
@@ -84,6 +93,7 @@ AStewartPlatform::AStewartPlatform()
 	cylinder_1->SetSimulatePhysics(true);
 	cylinder_1->SetMobility(EComponentMobility::Movable);
 	cylinder_1->SetRelativeLocation({0,0,40});
+	cylinder_1->SetMassOverrideInKg(NAME_None, 1.0f);
 		
 	yoke_driver_fixed_cylinder_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixedJointYokeCylinder"));
 	yoke_driver_fixed_cylinder_1->SetupAttachment(lower_yoke_driver_1);
@@ -103,6 +113,8 @@ AStewartPlatform::AStewartPlatform()
 	piston_1->SetMobility(EComponentMobility::Movable);
 	float piston_start = 6.0;
 	piston_1->SetRelativeLocation({0,0,piston_start});  // {0, 0, 40.0f}
+	piston_1->SetRelativeRotation({0,90.0f,0});
+	piston_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	cylinder_prismatic_piston_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("PrismaticCylinderPiston"));
 	cylinder_prismatic_piston_1->SetupAttachment(cylinder_1);
@@ -121,6 +133,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_yoke_driven_1->SetSimulatePhysics(true);
 	upper_yoke_driven_1->SetMobility(EComponentMobility::Movable);
 	upper_yoke_driven_1->SetRelativeLocation({0,0,42.5f});
+	upper_yoke_driven_1->SetMassOverrideInKg(NAME_None, 1.0f);
 	
 	yoke_driven_fixed_piston_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("YokeDrivenFixedPiston1"));
 	yoke_driven_fixed_piston_1->SetupAttachment(piston_1);
@@ -137,6 +150,8 @@ AStewartPlatform::AStewartPlatform()
 	upper_yoke_driver_1->SetupAttachment(upper_yoke_driven_1);
 	upper_yoke_driver_1->SetSimulatePhysics(true);
 	upper_yoke_driver_1->SetMobility(EComponentMobility::Movable);
+	upper_yoke_driver_1->SetRelativeRotation({0,0,342.0f});
+	upper_yoke_driver_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	upper_revolute_1_joint_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("UpperRevolute1Joint1"));
 	upper_revolute_1_joint_1->SetupAttachment(upper_yoke_driven_1);
@@ -154,10 +169,11 @@ AStewartPlatform::AStewartPlatform()
 
 	upper_revolute_disk_1 = CreateDefaultSubobject<UStaticMeshComponent>("UpperRevoluteDisk");
 	upper_revolute_disk_1->SetStaticMesh(upper_revolute_disk_asset.Object);
-	upper_revolute_disk_1->SetupAttachment(upper_yoke_driven_1);
+	upper_revolute_disk_1->SetupAttachment(upper_yoke_driver_1);
 	upper_revolute_disk_1->SetSimulatePhysics(true);
 	upper_revolute_disk_1->SetMobility(EComponentMobility::Movable);
-	upper_revolute_disk_1->SetRelativeLocation({0, 0, 2.0f});
+	upper_revolute_disk_1->SetRelativeLocation({0, 0, 2.5f});
+	upper_revolute_disk_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	upper_revolute_2_joint_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("UpperRevolute2Joint1"));
 	upper_revolute_2_joint_1->SetupAttachment(upper_yoke_driver_1);
@@ -166,7 +182,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_revolute_2_joint_1->SetDisableCollision(true);
 	upper_revolute_2_joint_1->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);  // This one must be locked
 	upper_revolute_2_joint_1->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);  // This one must be locked
-	upper_revolute_2_joint_1->SetRelativeLocation({0,0,2.0f});
+	upper_revolute_2_joint_1->SetRelativeLocation({0,0,2.5f});
 	// Leg 1 End //
 	
 	// Linking Legs to platform 
@@ -187,7 +203,7 @@ AStewartPlatform::AStewartPlatform()
 	leg1_dynamic_frame->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	leg1_dynamic_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	leg1_dynamic_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
-	leg1_dynamic_frame->SetRelativeLocation({0, 0, 3.5f});
+	leg1_dynamic_frame->SetRelativeLocation({0, 0, 2.5f});
 	
 }
 
@@ -204,14 +220,14 @@ void AStewartPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FRotator lower_spider_orientation = {0.0f, 0.0f, lower_yoke_driver_1->GetRelativeRotation().Roll};
+	FRotator lower_spider_orientation = {0, 0, lower_yoke_driver_1->GetRelativeRotation().Roll};
 	lower_spider_1->SetRelativeRotation(lower_spider_orientation);
 
-	FRotator upper_spider_orientation = {0.0f, 0.0f, upper_yoke_driver_1->GetRelativeRotation().Roll};
+	FRotator upper_spider_orientation = {upper_yoke_driver_1->GetRelativeRotation().Pitch, upper_yoke_driver_1->GetRelativeRotation().Yaw, upper_yoke_driver_1->GetRelativeRotation().Roll};
 	upper_spider_1->SetRelativeRotation(upper_spider_orientation);
 	
 	float realtimeSeconds = GetWorld()->GetRealTimeSeconds(); // https://answers.unrealengine.com/questions/167413/elapsed-milliseconds-since-start-of-level.html
-	float movement = 15.0f*sin(realtimeSeconds);
+	float movement = 5 + 15.0f*sin(realtimeSeconds);
 	if (movement <= -4.0f)
 	{
 		movement = -4.0f;
