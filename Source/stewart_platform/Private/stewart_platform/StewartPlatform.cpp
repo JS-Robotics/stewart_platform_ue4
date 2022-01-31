@@ -41,7 +41,7 @@ AStewartPlatform::AStewartPlatform()
 	dynamic_frame->SetStaticMesh(dynamic_frame_asset.Object);
 	dynamic_frame->SetupAttachment(RootComponent);
 	dynamic_frame->SetSimulatePhysics(false);
-	dynamic_frame->SetRelativeLocation({0, 0, 92.5f});
+	dynamic_frame->SetRelativeLocation({0, 0, 93.0f});
 	dynamic_frame->SetRelativeRotation({0,60.0f,0});
 
 	// // // Leg 1 start // // //
@@ -49,7 +49,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_yoke_driven_1->SetStaticMesh(lower_yoke_driven_asset.Object);
 	lower_yoke_driven_1->SetupAttachment(fixed_frame);
 	lower_yoke_driven_1->SetSimulatePhysics(true);
-	lower_yoke_driven_1->SetRelativeLocation({18.556623f,-55.235027f,2.5f});
+	lower_yoke_driven_1->SetRelativeLocation({18.556623f,-55.235027f,2.6f});
 	lower_yoke_driven_1->SetRelativeRotation({0.0f,250.0f,0});
 	// FBodyInstance* BodyInst = lower_yoke_driven_1->GetBodyInstance();
 	// BodyInst->SetMassScale(1222.0f);
@@ -62,6 +62,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_spider_1->SetupAttachment(lower_yoke_driven_1);
 	lower_spider_1->SetSimulatePhysics(false);
 	lower_spider_1->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	lower_spider_1->SetRelativeRotation({0,0,4.6f}); // Same as lower yoke start roll
 	
 	
 
@@ -92,7 +93,7 @@ AStewartPlatform::AStewartPlatform()
 	cylinder_1->SetupAttachment(lower_yoke_driver_1);
 	cylinder_1->SetSimulatePhysics(true);
 	cylinder_1->SetMobility(EComponentMobility::Movable);
-	cylinder_1->SetRelativeLocation({0,0,40});
+	cylinder_1->SetRelativeLocation({0,0,40.35f});
 	cylinder_1->SetMassOverrideInKg(NAME_None, 1.0f);
 		
 	yoke_driver_fixed_cylinder_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixedJointYokeCylinder"));
@@ -132,7 +133,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_yoke_driven_1->SetupAttachment(piston_1);
 	upper_yoke_driven_1->SetSimulatePhysics(true);
 	upper_yoke_driven_1->SetMobility(EComponentMobility::Movable);
-	upper_yoke_driven_1->SetRelativeLocation({0,0,42.5f});
+	upper_yoke_driven_1->SetRelativeLocation({0,0,42.6f});
 	upper_yoke_driven_1->SetMassOverrideInKg(NAME_None, 1.0f);
 	
 	yoke_driven_fixed_piston_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("YokeDrivenFixedPiston1"));
@@ -143,7 +144,7 @@ AStewartPlatform::AStewartPlatform()
 	yoke_driven_fixed_piston_1->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	yoke_driven_fixed_piston_1->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	yoke_driven_fixed_piston_1->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
-	yoke_driven_fixed_piston_1->SetRelativeLocation({0,0,42.5f});
+	yoke_driven_fixed_piston_1->SetRelativeLocation({0,0,42.6f});
 	
 	upper_yoke_driver_1 = CreateDefaultSubobject<UStaticMeshComponent>("UpperYokeDriver");
 	upper_yoke_driver_1->SetStaticMesh(upper_yoke_driver_asset.Object);
@@ -233,7 +234,7 @@ void AStewartPlatform::Tick(float DeltaTime)
 	{
 		movement = -4.0f;
 	}
-	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 92.0f + 6.0f});
+	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 93.0f + 6.0f});
 	// dynamic_frame->SetRelativeRotation({12.0f,12.0f,0});
 
 	// UE_LOG(LogTemp, Warning, TEXT("Upper yoke roll: %f -- Spider roll: %f"), upper_yoke_driver_1->GetRelativeRotation().Roll, lower_spider_1->GetRelativeRotation().Roll);
