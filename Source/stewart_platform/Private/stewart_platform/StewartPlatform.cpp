@@ -70,7 +70,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_yoke_driver_1->SetupAttachment(lower_yoke_driven_1);
 	lower_yoke_driver_1->SetSimulatePhysics(true);
 	lower_yoke_driver_1->SetMobility(EComponentMobility::Movable);
-	lower_yoke_driver_1->SetRelativeRotation({16.55538f,-16.55538f, 0});
+	lower_yoke_driver_1->SetRelativeRotation({16.0f,0, 4.6f});
 	lower_yoke_driver_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	// Constraint settings
@@ -150,7 +150,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_yoke_driver_1->SetupAttachment(upper_yoke_driven_1);
 	upper_yoke_driver_1->SetSimulatePhysics(true);
 	upper_yoke_driver_1->SetMobility(EComponentMobility::Movable);
-	upper_yoke_driver_1->SetRelativeRotation({0,0,342.0f});
+	upper_yoke_driver_1->SetRelativeRotation({4.6f,0, -16.0f});
 	upper_yoke_driver_1->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	upper_revolute_1_joint_1 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("UpperRevolute1Joint1"));
@@ -166,6 +166,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_spider_1->SetSimulatePhysics(false);
 	upper_spider_1->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	upper_spider_1->SetMobility(EComponentMobility::Movable);
+	upper_spider_1->SetRelativeRotation({0, 0, -16.0f});
 
 	upper_revolute_disk_1 = CreateDefaultSubobject<UStaticMeshComponent>("UpperRevoluteDisk");
 	upper_revolute_disk_1->SetStaticMesh(upper_revolute_disk_asset.Object);
@@ -222,8 +223,8 @@ void AStewartPlatform::Tick(float DeltaTime)
 
 	FRotator lower_spider_orientation = {0, 0, lower_yoke_driver_1->GetRelativeRotation().Roll};
 	lower_spider_1->SetRelativeRotation(lower_spider_orientation);
-
-	FRotator upper_spider_orientation = {upper_yoke_driver_1->GetRelativeRotation().Pitch, upper_yoke_driver_1->GetRelativeRotation().Yaw, upper_yoke_driver_1->GetRelativeRotation().Roll};
+	float Upper_Spider_Rotation =  upper_yoke_driver_1->GetRelativeRotation().Roll - upper_yoke_driven_1->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation = {0, 0, Upper_Spider_Rotation};
 	upper_spider_1->SetRelativeRotation(upper_spider_orientation);
 	
 	float realtimeSeconds = GetWorld()->GetRealTimeSeconds(); // https://answers.unrealengine.com/questions/167413/elapsed-milliseconds-since-start-of-level.html
@@ -233,6 +234,10 @@ void AStewartPlatform::Tick(float DeltaTime)
 		movement = -4.0f;
 	}
 	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 92.0f + 6.0f});
+	// dynamic_frame->SetRelativeRotation({12.0f,12.0f,0});
+
+	// UE_LOG(LogTemp, Warning, TEXT("Upper yoke roll: %f -- Spider roll: %f"), upper_yoke_driver_1->GetRelativeRotation().Roll, lower_spider_1->GetRelativeRotation().Roll);
+	// UE_LOG(LogTemp, Warning, TEXT("Yoke - Spider =  %f"), upper_yoke_driver_1->GetRelativeRotation().Yaw - lower_spider_1->GetRelativeRotation().Roll);
 
 }
 
