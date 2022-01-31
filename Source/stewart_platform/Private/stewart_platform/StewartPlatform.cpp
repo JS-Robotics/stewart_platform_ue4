@@ -191,7 +191,7 @@ AStewartPlatform::AStewartPlatform()
 	lower_yoke_driven_2->SetupAttachment(fixed_frame);
 	lower_yoke_driven_2->SetSimulatePhysics(true);
 	lower_yoke_driven_2->SetRelativeLocation({57.113251f,11.547006f,2.6f});
-	lower_yoke_driven_2->SetRelativeRotation({0.0f,250.0f,0});
+	lower_yoke_driven_2->SetRelativeRotation({0.0f,150.0f,0});
 	lower_yoke_driven_2->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	lower_spider_2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerSpider_2"));
@@ -199,14 +199,14 @@ AStewartPlatform::AStewartPlatform()
 	lower_spider_2->SetupAttachment(lower_yoke_driven_2);
 	lower_spider_2->SetSimulatePhysics(false);
 	lower_spider_2->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	lower_spider_2->SetRelativeRotation({0,0,4.6f}); // Same as lower yoke start roll
+	lower_spider_2->SetRelativeRotation({0,0,16.5f}); // Same as lower yoke start roll
 
 	lower_yoke_driver_2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerYokeDriver_2"));
 	lower_yoke_driver_2->SetStaticMesh(lower_yoke_driver_asset.Object);
 	lower_yoke_driver_2->SetupAttachment(lower_yoke_driven_2);
 	lower_yoke_driver_2->SetSimulatePhysics(true);
 	lower_yoke_driver_2->SetMobility(EComponentMobility::Movable);
-	lower_yoke_driver_2->SetRelativeRotation({16.0f,0, 4.6f});
+	lower_yoke_driver_2->SetRelativeRotation({1.95f,0, 16.5f});
 	lower_yoke_driver_2->SetMassOverrideInKg(NAME_None, 1.0f);
 	
 	// Must be created in constructor
@@ -241,7 +241,7 @@ AStewartPlatform::AStewartPlatform()
 	piston_2->SetSimulatePhysics(true);
 	piston_2->SetMobility(EComponentMobility::Movable);
 	piston_2->SetRelativeLocation({0,0,piston_start});  // {0, 0, 40.0f}
-	piston_2->SetRelativeRotation({0,90.0f,0});
+	piston_2->SetRelativeRotation({0,0.0f,0});
 	piston_2->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	cylinder_prismatic_piston_2 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("PrismaticCylinderPiston_2"));
@@ -277,7 +277,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_yoke_driver_2->SetupAttachment(upper_yoke_driven_2);
 	upper_yoke_driver_2->SetSimulatePhysics(true);
 	upper_yoke_driver_2->SetMobility(EComponentMobility::Movable);
-	upper_yoke_driver_2->SetRelativeRotation({4.6f,0, -16.0f});
+	upper_yoke_driver_2->SetRelativeRotation({-1.95f,0, -16.5f});
 	upper_yoke_driver_2->SetMassOverrideInKg(NAME_None, 1.0f);
 
 	upper_revolute_1_joint_2 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("UpperRevolute1Joint1_2"));
@@ -293,7 +293,7 @@ AStewartPlatform::AStewartPlatform()
 	upper_spider_2->SetSimulatePhysics(false);
 	upper_spider_2->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	upper_spider_2->SetMobility(EComponentMobility::Movable);
-	upper_spider_2->SetRelativeRotation({0, 0, -16.0f});
+	upper_spider_2->SetRelativeRotation({0, 0, -16.5f});
 
 	upper_revolute_disk_2 = CreateDefaultSubobject<UStaticMeshComponent>("UpperRevoluteDisk_2");
 	upper_revolute_disk_2->SetStaticMesh(upper_revolute_disk_asset.Object);
@@ -332,6 +332,25 @@ AStewartPlatform::AStewartPlatform()
 	leg1_dynamic_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	leg1_dynamic_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
 	leg1_dynamic_frame->SetRelativeLocation({0, 0, 2.5f});
+
+	leg2_fixed_frame = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixFrameLeg1_2"));
+	leg2_fixed_frame->SetupAttachment(RootComponent);  // Should this rather be linked to RootComponent?
+	leg2_fixed_frame->ComponentName1.ComponentName = "FixedFrame";
+	leg2_fixed_frame->ComponentName2.ComponentName = "LowerYokeDriven_2";
+	leg2_fixed_frame->SetDisableCollision(true);
+	leg2_fixed_frame->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg2_fixed_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg2_fixed_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+
+	leg2_dynamic_frame = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("DynamicFrameLeg1_2"));
+	leg2_dynamic_frame->SetupAttachment(upper_revolute_disk_1);
+	leg2_dynamic_frame->ComponentName1.ComponentName = "UpperRevoluteDisk_2";
+	leg2_dynamic_frame->ComponentName2.ComponentName = "DynamicFrame";
+	leg2_dynamic_frame->SetDisableCollision(true);
+	leg2_dynamic_frame->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg2_dynamic_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg2_dynamic_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg2_dynamic_frame->SetRelativeLocation({0, 0, 2.5f});
 	
 }
 
