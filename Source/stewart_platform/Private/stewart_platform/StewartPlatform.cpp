@@ -952,11 +952,47 @@ void AStewartPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// LEG 1
 	FRotator lower_spider_orientation = {0, 0, lower_yoke_driver_1->GetRelativeRotation().Roll};
 	lower_spider_1->SetRelativeRotation(lower_spider_orientation);
-	float Upper_Spider_Rotation =  upper_yoke_driver_1->GetRelativeRotation().Roll - upper_yoke_driven_1->GetRelativeRotation().Roll;
-	FRotator upper_spider_orientation = {0, 0, Upper_Spider_Rotation};
+	float calc_upper_Spider_Rotation =  upper_yoke_driver_1->GetRelativeRotation().Roll - upper_yoke_driven_1->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation = {0, 0, calc_upper_Spider_Rotation};
 	upper_spider_1->SetRelativeRotation(upper_spider_orientation);
+
+	// LEG 2
+	FRotator lower_spider_orientation_2 = {0, 0, lower_yoke_driver_2->GetRelativeRotation().Roll};
+	lower_spider_2->SetRelativeRotation(lower_spider_orientation_2);
+	float calc_upper_Spider_Rotation_2 =  upper_yoke_driver_2->GetRelativeRotation().Roll - upper_yoke_driven_2->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation_2 = {0, 0, calc_upper_Spider_Rotation_2};
+	upper_spider_2->SetRelativeRotation(upper_spider_orientation_2);
+
+	// LEG 3
+	FRotator lower_spider_orientation_3 = {0, 0, lower_yoke_driver_3->GetRelativeRotation().Roll};
+	lower_spider_3->SetRelativeRotation(lower_spider_orientation_3);
+	float calc_upper_Spider_Rotation_3 =  upper_yoke_driver_3->GetRelativeRotation().Roll - upper_yoke_driven_3->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation_3 = {0, 0, calc_upper_Spider_Rotation_3};
+	upper_spider_3->SetRelativeRotation(upper_spider_orientation_3);
+
+	// LEG 4
+	FRotator lower_spider_orientation_4 = {0, 0, lower_yoke_driver_4->GetRelativeRotation().Roll};
+	lower_spider_4->SetRelativeRotation(lower_spider_orientation_4);
+	float calc_upper_Spider_Rotation_4 =  upper_yoke_driver_4->GetRelativeRotation().Roll - upper_yoke_driven_4->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation_4 = {0, 0, calc_upper_Spider_Rotation_4};
+	upper_spider_4->SetRelativeRotation(upper_spider_orientation_4);
+
+	// LEG 5
+	FRotator lower_spider_orientation_5 = {0, 0, lower_yoke_driver_5->GetRelativeRotation().Roll};
+	lower_spider_5->SetRelativeRotation(lower_spider_orientation_5);
+	float calc_upper_Spider_Rotation_5 =  upper_yoke_driver_5->GetRelativeRotation().Roll - upper_yoke_driven_5->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation_5 = {0, 0, calc_upper_Spider_Rotation_5};
+	upper_spider_5->SetRelativeRotation(upper_spider_orientation_5);
+
+	// LEG 6
+	FRotator lower_spider_orientation_6 = {0, 0, lower_yoke_driver_6->GetRelativeRotation().Roll};
+	lower_spider_6->SetRelativeRotation(lower_spider_orientation_6);
+	float calc_upper_Spider_Rotation_6 =  upper_yoke_driver_6->GetRelativeRotation().Roll - upper_yoke_driven_6->GetRelativeRotation().Roll;
+	FRotator upper_spider_orientation_6 = {0, 0, calc_upper_Spider_Rotation_6};
+	upper_spider_6->SetRelativeRotation(upper_spider_orientation_6);
 	
 	float realtimeSeconds = GetWorld()->GetRealTimeSeconds(); // https://answers.unrealengine.com/questions/167413/elapsed-milliseconds-since-start-of-level.html
 	float movement = 5 + 15.0f*sin(realtimeSeconds);
