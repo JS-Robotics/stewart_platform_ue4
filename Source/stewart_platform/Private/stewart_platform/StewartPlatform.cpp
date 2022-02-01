@@ -694,6 +694,133 @@ AStewartPlatform::AStewartPlatform()
 	upper_revolute_2_joint_5->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);  // This one must be locked
 	upper_revolute_2_joint_5->SetRelativeLocation({0,0,2.5f});
 	// Leg 5 End // // // // // // // // // // // // // // // // // // // // // // // //
+
+	// Leg 6 Start // // // // // // // // // // // // // // // // // // // // // // // //
+	lower_yoke_driven_6 = CreateDefaultSubobject<UStaticMeshComponent>("LowerYokeDriven_6");
+	lower_yoke_driven_6->SetStaticMesh(lower_yoke_driven_asset.Object);
+	lower_yoke_driven_6->SetupAttachment(fixed_frame);
+	lower_yoke_driven_6->SetSimulatePhysics(true);
+	lower_yoke_driven_6->SetRelativeLocation({-18.556623f,-55.235027f,2.6f});
+	lower_yoke_driven_6->SetRelativeRotation({0.0f,30.0f,0});
+	lower_yoke_driven_6->SetMassOverrideInKg(NAME_None, 1.0f);
+
+	lower_spider_6 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerSpider_6"));
+	lower_spider_6->SetStaticMesh(lower_spider_asset.Object);
+	lower_spider_6->SetupAttachment(lower_yoke_driven_6);
+	lower_spider_6->SetSimulatePhysics(false);
+	lower_spider_6->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	lower_spider_6->SetRelativeRotation({0,0,16.5f}); // Same as lower yoke start roll
+
+	lower_yoke_driver_6= CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LowerYokeDriver_6"));
+	lower_yoke_driver_6->SetStaticMesh(lower_yoke_driver_asset.Object);
+	lower_yoke_driver_6->SetupAttachment(lower_yoke_driven_6);
+	lower_yoke_driver_6->SetSimulatePhysics(true);
+	lower_yoke_driver_6->SetMobility(EComponentMobility::Movable);
+	lower_yoke_driver_6->SetRelativeRotation({1.95f,0, 16.5f});
+	lower_yoke_driver_6->SetMassOverrideInKg(NAME_None, 1.0f);
+	
+	lower_revolute_1_joint_6 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("RevoluteJoint_6"));
+	lower_revolute_1_joint_6->SetupAttachment(lower_yoke_driven_6);
+	lower_revolute_1_joint_6->ComponentName1.ComponentName = "LowerYokeDriven_6";
+	lower_revolute_1_joint_6->ComponentName2.ComponentName = "LowerYokeDriver_6";
+	lower_revolute_1_joint_6->SetDisableCollision(true);
+	lower_revolute_1_joint_6->SetAngularSwing1Limit(_rotation_locked, 0);  // This one must be locked
+	
+	cylinder_6 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cylinder_6"));
+	cylinder_6->SetStaticMesh(cylinder_asset.Object);
+	cylinder_6->SetupAttachment(lower_yoke_driver_6);
+	cylinder_6->SetSimulatePhysics(true);
+	cylinder_6->SetMobility(EComponentMobility::Movable);
+	cylinder_6->SetRelativeLocation({0,0,40.35f});
+	cylinder_6->SetMassOverrideInKg(NAME_None, 1.0f);
+		
+	yoke_driver_fixed_cylinder_6 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixedJointYokeCylinder_6"));
+	yoke_driver_fixed_cylinder_6->SetupAttachment(lower_yoke_driver_6);
+	yoke_driver_fixed_cylinder_6->ComponentName1.ComponentName = "LowerYokeDriver_6";
+	yoke_driver_fixed_cylinder_6->ComponentName2.ComponentName = "Cylinder_6";
+	yoke_driver_fixed_cylinder_6->SetDisableCollision(true);
+	yoke_driver_fixed_cylinder_6->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	yoke_driver_fixed_cylinder_6->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	yoke_driver_fixed_cylinder_6->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+	yoke_driver_fixed_cylinder_6->SetRelativeLocation({0,0,2.5});
+
+	piston_6 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Piston_6"));
+	piston_6->SetStaticMesh(piston_asset.Object);
+	piston_6->SetupAttachment(cylinder_6);
+	piston_6->SetSimulatePhysics(true);
+	piston_6->SetMobility(EComponentMobility::Movable);
+	piston_6->SetRelativeLocation({0,0,piston_start});  // {0, 0, 40.0f}
+	piston_6->SetRelativeRotation({0,0.0f,0});
+	piston_6->SetMassOverrideInKg(NAME_None, 1.0f);
+
+	cylinder_prismatic_piston_6 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("PrismaticCylinderPiston_6"));
+	cylinder_prismatic_piston_6->SetupAttachment(cylinder_6);
+	cylinder_prismatic_piston_6->ComponentName1.ComponentName = "Cylinder_6";
+	cylinder_prismatic_piston_6->ComponentName2.ComponentName = "Piston_6";
+	cylinder_prismatic_piston_6->SetDisableCollision(true);
+	cylinder_prismatic_piston_6->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	cylinder_prismatic_piston_6->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	cylinder_prismatic_piston_6->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+	cylinder_prismatic_piston_6->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, 35.0f);
+
+	upper_yoke_driven_6 = CreateDefaultSubobject<UStaticMeshComponent>("UpperYokeDriven_6");
+	upper_yoke_driven_6->SetStaticMesh(upper_yoke_driven_asset.Object);
+	upper_yoke_driven_6->SetupAttachment(piston_6);
+	upper_yoke_driven_6->SetSimulatePhysics(true);
+	upper_yoke_driven_6->SetMobility(EComponentMobility::Movable);
+	upper_yoke_driven_6->SetRelativeLocation({0,0,42.6f});
+	upper_yoke_driven_6->SetMassOverrideInKg(NAME_None, 1.0f);
+	
+	yoke_driven_fixed_piston_6 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("YokeDrivenFixedPiston1_6"));
+	yoke_driven_fixed_piston_6->SetupAttachment(piston_6);
+	yoke_driven_fixed_piston_6->ComponentName1.ComponentName = "Piston_6";
+	yoke_driven_fixed_piston_6->ComponentName2.ComponentName = "UpperYokeDriven_6";
+	yoke_driven_fixed_piston_6->SetDisableCollision(true);
+	yoke_driven_fixed_piston_6->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	yoke_driven_fixed_piston_6->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	yoke_driven_fixed_piston_6->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+	yoke_driven_fixed_piston_6->SetRelativeLocation({0,0,42.6f});
+	
+	upper_yoke_driver_6 = CreateDefaultSubobject<UStaticMeshComponent>("UpperYokeDriver_6");
+	upper_yoke_driver_6->SetStaticMesh(upper_yoke_driver_asset.Object);
+	upper_yoke_driver_6->SetupAttachment(upper_yoke_driven_6);
+	upper_yoke_driver_6->SetSimulatePhysics(true);
+	upper_yoke_driver_6->SetMobility(EComponentMobility::Movable);
+	upper_yoke_driver_6->SetRelativeRotation({-1.95f,0, -16.5f});
+	upper_yoke_driver_6->SetMassOverrideInKg(NAME_None, 1.0f);
+
+	upper_revolute_1_joint_6 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("UpperRevolute1Joint1_6"));
+	upper_revolute_1_joint_6->SetupAttachment(upper_yoke_driven_6);
+	upper_revolute_1_joint_6->ComponentName1.ComponentName = "UpperYokeDriven_6";
+	upper_revolute_1_joint_6->ComponentName2.ComponentName = "UpperYokeDriver_6";
+	upper_revolute_1_joint_6->SetDisableCollision(true);
+	upper_revolute_1_joint_6->SetAngularSwing1Limit(_rotation_locked, 0);  // This one must be locked
+
+	upper_spider_6 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UpperSpider_6"));
+	upper_spider_6->SetStaticMesh(lower_spider_asset.Object);
+	upper_spider_6->SetupAttachment(upper_yoke_driven_6);
+	upper_spider_6->SetSimulatePhysics(false);
+	upper_spider_6->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	upper_spider_6->SetMobility(EComponentMobility::Movable);
+	upper_spider_6->SetRelativeRotation({0, 0, -16.5f});
+
+	upper_revolute_disk_6 = CreateDefaultSubobject<UStaticMeshComponent>("UpperRevoluteDisk_6");
+	upper_revolute_disk_6->SetStaticMesh(upper_revolute_disk_asset.Object);
+	upper_revolute_disk_6->SetupAttachment(upper_yoke_driver_6);
+	upper_revolute_disk_6->SetSimulatePhysics(true);
+	upper_revolute_disk_6->SetMobility(EComponentMobility::Movable);
+	upper_revolute_disk_6->SetRelativeLocation({0, 0, 2.5f});
+	upper_revolute_disk_6->SetMassOverrideInKg(NAME_None, 1.0f);
+
+	upper_revolute_2_joint_6 = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("UpperRevolute2Joint1_6"));
+	upper_revolute_2_joint_6->SetupAttachment(upper_yoke_driver_6);
+	upper_revolute_2_joint_6->ComponentName1.ComponentName = "UpperYokeDriver_6";
+	upper_revolute_2_joint_6->ComponentName2.ComponentName = "UpperRevoluteDisk_6";
+	upper_revolute_2_joint_6->SetDisableCollision(true);
+	upper_revolute_2_joint_6->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);  // This one must be locked
+	upper_revolute_2_joint_6->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);  // This one must be locked
+	upper_revolute_2_joint_6->SetRelativeLocation({0,0,2.5f});
+	// Leg 6 End // // // // // // // // // // // // // // // // // // // // // // // //
 	
 	// Linking Legs to platform 
 	leg1_fixed_frame = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixFrameLeg1"));
@@ -790,6 +917,25 @@ AStewartPlatform::AStewartPlatform()
 	leg5_dynamic_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	leg5_dynamic_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
 	leg5_dynamic_frame->SetRelativeLocation({0, 0, 2.5f});
+
+	leg6_fixed_frame = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("FixFrameLeg1_6"));
+	leg6_fixed_frame->SetupAttachment(RootComponent);  // Should this rather be linked to RootComponent?
+	leg6_fixed_frame->ComponentName1.ComponentName = "FixedFrame";
+	leg6_fixed_frame->ComponentName2.ComponentName = "LowerYokeDriven_6";
+	leg6_fixed_frame->SetDisableCollision(true);
+	leg6_fixed_frame->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg6_fixed_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg6_fixed_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+
+	leg6_dynamic_frame = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("DynamicFrameLeg1_6"));
+	leg6_dynamic_frame->SetupAttachment(upper_revolute_disk_6);
+	leg6_dynamic_frame->ComponentName1.ComponentName = "UpperRevoluteDisk_6";
+	leg6_dynamic_frame->ComponentName2.ComponentName = "DynamicFrame";
+	leg6_dynamic_frame->SetDisableCollision(true);
+	leg6_dynamic_frame->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg6_dynamic_frame->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg6_dynamic_frame->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
+	leg6_dynamic_frame->SetRelativeLocation({0, 0, 2.5f});
 	
 }
 
