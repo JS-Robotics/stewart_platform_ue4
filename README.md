@@ -1,3 +1,9 @@
+# stewart_platform_ue4
+
+<p align="center">
+    <img src="misc/Images/UE4_Stewart_platform_thumbnail.PNG"/>
+</p>
+
 https://youtrack.jetbrains.com/issue/RIDER-45008
 
 You've got number of options:
