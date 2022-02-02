@@ -3,7 +3,7 @@
 
 #include "stewart_platform/StewartPlatform.h"
 
-#include "FindInBlueprintManager.h"
+
 #include "EnvironmentQuery/EnvQueryTypes.h"
 
 // Sets default values
@@ -943,7 +943,8 @@ AStewartPlatform::AStewartPlatform()
 void AStewartPlatform::BeginPlay()
 {
 	Super::BeginPlay();
-
+	_wave_thread = new Fwave_generator(GetWorld());
+	// TSharedPtr<Fwave_generator> someRunnable = MakeShareable<Fwave_generator>(GetWorld());  // TODO Figure out how to do this
 	
 }
 
@@ -1001,10 +1002,19 @@ void AStewartPlatform::Tick(float DeltaTime)
 		movement = -4.0f;
 	}
 	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 93.0f + 6.0f});
-	// dynamic_frame->SetRelativeRotation({12.0f,12.0f,0});
-
-	// UE_LOG(LogTemp, Warning, TEXT("Upper yoke roll: %f -- Spider roll: %f"), upper_yoke_driver_1->GetRelativeRotation().Roll, lower_spider_1->GetRelativeRotation().Roll);
-	// UE_LOG(LogTemp, Warning, TEXT("Yoke - Spider =  %f"), upper_yoke_driver_1->GetRelativeRotation().Yaw - lower_spider_1->GetRelativeRotation().Roll);
 
 }
 
+void AStewartPlatform::EndPlay(const EEndPlayReason::Type EndPlayReason){
+	Super::EndPlay(EndPlayReason);
+
+	if (_wave_thread && _wave_thread->is_running()) {
+		_wave_thread->Stop();
+		while (_wave_thread->is_running())
+		{
+			FPlatformProcess::Sleep(0.1);
+		}
+		delete _wave_thread;
+		UE_LOG(LogTemp, Warning, TEXT("Stopped and deleted _wave_thread"));
+	}
+}

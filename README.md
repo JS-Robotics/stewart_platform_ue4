@@ -15,6 +15,9 @@ You've got number of options:
       Plugins/Developer/RiderLink/Binaries
       Plugins/Developer/RiderLink/Intermediate
 
-##Collision filtering: 
+## Collision filtering: 
 * https://www.unrealengine.com/en-US/blog/collision-filtering?sessionInvalidated=true
 * https://forums.unrealengine.com/t/ability-to-disable-collision-between-specific-components/89929/11
+
+## Good UE4 threading example
+* https://benui.ca/unreal/frunnable-threads/

@@ -5,7 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
+
+#include "wave_generator/wave_generator.h"
+
 #include "StewartPlatform.generated.h"
+
 
 UCLASS()
 class STEWART_PLATFORM_API AStewartPlatform : public AActor
@@ -15,7 +19,7 @@ class STEWART_PLATFORM_API AStewartPlatform : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AStewartPlatform();
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UStaticMeshComponent* lower_yoke_driven_1;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UStaticMeshComponent* lower_spider_1;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UStaticMeshComponent* lower_yoke_driver_1;
@@ -138,17 +142,16 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UPhysicsConstraintComponent* cylinder_prismatic_piston_6;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UPhysicsConstraintComponent* leg6_fixed_frame;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "StewartPlatform") UPhysicsConstraintComponent* leg6_dynamic_frame;
-	
-
-	
-	
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
+	Fwave_generator* _wave_thread = nullptr;
 };
