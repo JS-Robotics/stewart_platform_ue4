@@ -20,6 +20,8 @@ public:
 
 	bool is_running(){return !_stop_thread;}
 
+	void get_pose(FVector& position, FRotator& rotation);
+
 protected:
 	FCriticalSection UE4_tmux;
 	FRunnableThread* Thread = nullptr;
@@ -27,6 +29,12 @@ protected:
 
 	
 private:
+	float pierson_moskowitz_wave_spectrum(float w, float H_s, float T_p);
+	float jonswap_wave_spectrum(float w, float H_s, float T_p, float y);
+	float irregular_wave(float t, TArray<float> w, float H_s, float T_p, float y, float x, float& amplitude, float& phase);
+	
 	UWorld* _test;
 	bool _stop_thread;
+	FVector position_;
+	FRotator rotation_;
 };

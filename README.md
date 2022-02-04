@@ -21,3 +21,6 @@ You've got number of options:
 
 ## Good UE4 threading example
 * https://benui.ca/unreal/frunnable-threads/
+
+## Randomfloat with Seed
+* https://forums.unrealengine.com/t/seeded-fmath-rand/346211/6

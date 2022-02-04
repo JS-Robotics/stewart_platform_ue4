@@ -1001,7 +1001,16 @@ void AStewartPlatform::Tick(float DeltaTime)
 	{
 		movement = -4.0f;
 	}
-	dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 93.0f + 6.0f});
+
+	FVector position = {0,0,0};
+	FRotator rotation = {0,0,0};
+	_wave_thread->get_pose(position, rotation);
+	position.Z = position.Z + 93.0f + 10.0f;
+	rotation.Yaw = rotation.Yaw + 60.0f;
+	
+	dynamic_frame->SetRelativeRotation(rotation);
+	dynamic_frame->SetRelativeLocation(position);
+	// dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 93.0f + 6.0f});
 
 }
 
