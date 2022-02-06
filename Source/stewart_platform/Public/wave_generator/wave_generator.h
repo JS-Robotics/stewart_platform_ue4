@@ -5,6 +5,15 @@
 #include "CoreMinimal.h"
 #include "HAL/Runnable.h"
 
+struct WaveData{
+	float heave;
+	float surge;
+	float sway;
+	float roll;
+	float pitch;
+	float yaw;
+};
+
 /**
  * 
  */
@@ -32,6 +41,7 @@ private:
 	float pierson_moskowitz_wave_spectrum(float w, float H_s, float T_p);
 	float jonswap_wave_spectrum(float w, float H_s, float T_p, float y);
 	float irregular_wave(float t, TArray<float> w, float H_s, float T_p, float y, float x, float& amplitude, float& phase);
+	float body_displacment(float angle, float t, TArray<float> w, float H_s, float T_p, float y, float x, WaveData& wave_data);
 	
 	UWorld* _test;
 	bool _stop_thread;

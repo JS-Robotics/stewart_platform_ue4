@@ -11,7 +11,6 @@ AStewartPlatform::AStewartPlatform()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	//Get Meshes
 	// UString lower_yoke_driven_path = "Meshes/LinearActuator/yoke_lower_driven.yoke_lower_cylinder";
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driven_asset(TEXT("/Game/Meshes/LinearActuator/lower_yoke_driven.lower_yoke_driven"));
@@ -1011,7 +1010,7 @@ void AStewartPlatform::Tick(float DeltaTime)
 	dynamic_frame->SetRelativeRotation(rotation);
 	dynamic_frame->SetRelativeLocation(position);
 	// dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 93.0f + 6.0f});
-
+	
 }
 
 void AStewartPlatform::EndPlay(const EEndPlayReason::Type EndPlayReason){
