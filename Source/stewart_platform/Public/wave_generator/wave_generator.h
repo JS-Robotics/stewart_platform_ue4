@@ -23,19 +23,17 @@ public:
 	Fwave_generator(UWorld* test);
 	~Fwave_generator();
 
+	// FRunnable Pure Virtual functions
 	bool Init() override;
 	uint32 Run() override;
 	void Stop() override;
 
 	bool is_running(){return !_stop_thread;}
-
 	void get_pose(FVector& position, FRotator& rotation);
 
 protected:
 	FCriticalSection UE4_tmux;
 	FRunnableThread* Thread = nullptr;
-	
-
 	
 private:
 	float pierson_moskowitz_wave_spectrum(float w, float H_s, float T_p);

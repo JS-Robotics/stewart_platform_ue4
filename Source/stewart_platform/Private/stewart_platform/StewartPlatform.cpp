@@ -12,7 +12,6 @@ AStewartPlatform::AStewartPlatform()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	//Get Meshes
-	// UString lower_yoke_driven_path = "Meshes/LinearActuator/yoke_lower_driven.yoke_lower_cylinder";
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driven_asset(TEXT("/Game/Meshes/LinearActuator/lower_yoke_driven.lower_yoke_driven"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_spider_asset(TEXT("/Game/Meshes/LinearActuator/lower_spider.lower_spider"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> lower_yoke_driver_asset(TEXT("/Game/Meshes/LinearActuator/lower_yoke_driver.lower_yoke_driver"));
@@ -35,7 +34,6 @@ AStewartPlatform::AStewartPlatform()
 	fixed_frame->SetSimulatePhysics(false);
 	fixed_frame->SetRelativeLocation({0,0,2.0f});
 	
-
 	dynamic_frame = CreateDefaultSubobject<UStaticMeshComponent>("DynamicFrame");
 	dynamic_frame->SetStaticMesh(dynamic_frame_asset.Object);
 	dynamic_frame->SetupAttachment(RootComponent);
@@ -81,9 +79,6 @@ AStewartPlatform::AStewartPlatform()
 	lower_revolute_1_joint_1->ComponentName2.ComponentName = "LowerYokeDriver";
 	lower_revolute_1_joint_1->SetDisableCollision(true);
 	lower_revolute_1_joint_1->SetAngularSwing1Limit(_rotation_locked, 0);  // This one must be locked
-	// lower_revolute_1_joint->SetAngularSwing2Limit(_rotation_locked, 0);  // Red
-	// lower_revolute_1_joint->SetAngularTwistLimit(_rotation_locked, 0);  // Green
-
 	
 	cylinder_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cylinder"));
 	cylinder_1->SetStaticMesh(cylinder_asset.Object);
@@ -123,7 +118,6 @@ AStewartPlatform::AStewartPlatform()
 	cylinder_prismatic_piston_1->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0);
 	cylinder_prismatic_piston_1->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0);
 	cylinder_prismatic_piston_1->SetLinearZLimit(ELinearConstraintMotion::LCM_Limited, 35.0f);
-	// cylinder_prismatic_piston->SetLinearZLimit(ELinearConstraintMotion::LCM_Free, 0.0f);
 
 	upper_yoke_driven_1 = CreateDefaultSubobject<UStaticMeshComponent>("UpperYokeDriven");
 	upper_yoke_driven_1->SetStaticMesh(upper_yoke_driven_asset.Object);
@@ -993,23 +987,14 @@ void AStewartPlatform::Tick(float DeltaTime)
 	float calc_upper_Spider_Rotation_6 =  upper_yoke_driver_6->GetRelativeRotation().Roll - upper_yoke_driven_6->GetRelativeRotation().Roll;
 	FRotator upper_spider_orientation_6 = {0, 0, calc_upper_Spider_Rotation_6};
 	upper_spider_6->SetRelativeRotation(upper_spider_orientation_6);
-	
-	float realtimeSeconds = GetWorld()->GetRealTimeSeconds(); // https://answers.unrealengine.com/questions/167413/elapsed-milliseconds-since-start-of-level.html
-	float movement = 5 + 15.0f*sin(realtimeSeconds);
-	if (movement <= -4.0f)
-	{
-		movement = -4.0f;
-	}
 
 	FVector position = {0,0,0};
 	FRotator rotation = {0,0,0};
 	_wave_thread->get_pose(position, rotation);
-	position.Z = position.Z + 93.0f + 10.0f;
+	position.Z = position.Z + 93.0f + 15.0f;
 	rotation.Yaw = rotation.Yaw + 60.0f;
-	
 	dynamic_frame->SetRelativeRotation(rotation);
 	dynamic_frame->SetRelativeLocation(position);
-	// dynamic_frame->SetRelativeLocation({movement/1.0f,movement/1.0f,movement + 93.0f + 6.0f});
 	
 }
 
