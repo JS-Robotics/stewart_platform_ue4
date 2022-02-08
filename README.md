@@ -1,16 +1,7 @@
 # stewart_platform_ue4
 
-![sadsa](misc/Images/SetwartPlatformVideo.mp4)
+https://user-images.githubusercontent.com/69819322/153052820-ad10d3b8-ba63-4826-be2d-aa71e3f2b3bf.mov
 
-<p align="center">
-
-  <video controls>
-
-    <source src="misc/Images/SetwartPlatformVideo.mov" type="video/mp4">
-
-  </video>
-
-</p>
 
 https://youtrack.jetbrains.com/issue/RIDER-45008
 
