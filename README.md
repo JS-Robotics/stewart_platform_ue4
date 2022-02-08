@@ -1,8 +1,7 @@
 # stewart_platform_ue4
 
-<p align="center">
-    <img src="misc/Images/UE4_Stewart_platform_thumbnail.PNG"/>
-</p>
+[![Wath the video]](misc/Images/SetwartPlatformVideo.mp4)
+
 
 https://youtrack.jetbrains.com/issue/RIDER-45008
 
