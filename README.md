@@ -1,7 +1,10 @@
 # stewart_platform_ue4
 
-[![Wath the video]](misc/Images/SetwartPlatformVideo.mp4)
-
+<p align="center">
+  <video controls>
+    <source src="misc/Images/SetwartPlatformVideo.mov" type="video/mp4">
+  </video>
+</p>
 
 https://youtrack.jetbrains.com/issue/RIDER-45008
 
